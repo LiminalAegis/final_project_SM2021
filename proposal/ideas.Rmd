@@ -1,18 +1,138 @@
 ---
 title: "Project Proposal"
-output: html_notebook
+output:
+  html_notebook:
+    toc: true
+    toc_float: true
+    number_sections: TRUE
 ---
+# Introduction:{#github_link}
+  
+Following a disaster, the best thing to do tend tends to be trying to figure out what went wrong. And with the tragedy of the steadily growing rates of extinction across all species as time has gone on I found a special interest in an analysis that would take after these patterns, as doubtless the data lends itself to telling a story of great use. 
 
-(notice that you can reuse some of the sections below for the final project report)
+As someone whose quite interested in plants, having a degree of experience due to my time in environmental science classes, as well as being a gardener in my own right, the *Plantae* kingdom has a special place in my heart. And because of this I wanted to look at extinct plant species specifically, thus leading to the founding premise of this data anaylsis. 
 
-## Section 1. Introduction
+Using the following data set:
+<https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-08-18>
 
-Include a brief **introduction or motivation** here
+I constructed what is best described as the data-equivalent of the  "stream of consciousnesses" writing technique. As seen below, where given I started with my ideas already having a data set in mind, I decided to jump right into initial rough and unpolished analysis in order to help get my brain jump-started for my later complete analysis. 
 
-## Section 2. Data Analysis Plan
 
-List any **initial questions** you plan to explore in this project. 
 
-## Section 3. Data
 
-Include a brief **description of your dataset** (source, available attributes, format, etc.)
+## Setting up resources
+
+As with all projects I wanted to go ahead and define all data sets, packages, and libraries that I may want to use throughout the project here. 
+
+One of my first and most import actions was installing "tidytuesdayR" from CRAN. This loads the readme and all the data sets of the specific week's Tidy Tuesday data rather than having to import and read all of the data manually, which speeds things up significantly. 
+
+```{r}
+#TidytuesdayR function
+tuesdata <- tidytuesdayR::tt_load('2020-08-18')
+
+#Renames all relevant plant data for easier reference
+plants <- tuesdata$plants
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+## Begining early analysis
+
+The first thing I wanted to load the data in order to get a general feel of what I'm working with. In order to develop questions going forward for rough analysis.
+```{r}
+View(plants)
+plants
+```
+Upon investigation with the 'binomial_name' variable I decided It'd be best to divide the two of these into separate columns of "Genus" and "Species" so I'd be able to observe trends across a specific Genus, as it allows for far easier trend indication that looking at a species by species basis of wildly different families. 
+
+```{r}
+plants <- separate(plants, binomial_name, into =  c("Genus", "Species"), sep = " ")
+```
+
+```{r}
+plants
+```
+
+
+Following this I developed the following questions I wanted to start looking into:
+
+* Which Genus appears the most throughout the data set as Extinct? 
+* Once I have answers, what threat is the most common to that species? 
+* Does this threat correspond with other extinctions?
+
+# Data analysis plan
+
+From here I went ahead with some rough data manipulation to get basic aspects of my questions answered.
+
+## Answering initial Questions:
+
+### What is the genus with the highest extinction total? 
+
+Firstly, what genus appears the most throughout the extinct species list?
+```{r}
+plants %>%
+  group_by(Genus) %>%
+  summarize(extinction_total = n())%>%
+  arrange(desc(extinction_total))
+```
+Answer: Overwhelmingly Cyanea, not only that, but compared to the other top contenders, it's double the next highest extinction total. In terms of later analysis this indicates to me that outside research may lead to a really telling story through the trend this particular group has endured. 
+
+### What is the most common threat they face?
+
+Now, for the next question I had. Knowing Cyanea is the most commonly extinct species, I wondered if part of the reason may be an especial vulnerability to one specific kind of threat that has continued to grow overwhelmingly. 
+
+Firstly, I need to tidy the data further given how threats are established.
+
+For viewing context: 
+
+* Threat type
+  + AA = Agriculture & Aquaculture
+  + BRU = Biological Resource Use
+  + RCD = Commercial Development
+  + ISGD = Invasive species
+  + EPM = Energy Production & Mining
+  + CC = Climate Change
+  + HID = Human Intrusions
+  + P = Pollution
+  + TS = Transportation Corridor
+  + NSM = Natural System Modifications
+  + GE = Geological Events
+  + NA = Unknown
+
+```{r}
+plants %>%
+  filter(Genus == "Cyanea") %>%
+  select(threat_AA:threat_NA) %>%
+  colSums(plants!= 0)
+```
+
+Note: The reason threats are larger than the number of Cyanea species is due to certain Cyanea species facing more than one primary threat.
+
+Honestly I was not expecting such an interesting result. 
+While Invasive species as the largest reads fairly clearly the fact that "threat: unknown" reaches near to it's level makes me very curious on the research side of things. I intend to check in on what exactly leads to the IUCN classifying the cause as "Unknown", as it may give way to a better picture of what's going on. 
+
+### Does this trend appear amongst the rest of the data? 
+
+ wanted to create another brief table to see how isolated the case of Cyanea might be compared to all other 318 groups in this dataset. Should it's reason for extinction correspond with the rest the species may just be especially vulnerable to factors of change, much like with amphibians tending to be the species most effected by changes in their enviornment and specialist nature. In turn, this could also lead to looking into the Cyanea as an indicator of the main causes of extinction going forward. 
+
+```{r}
+plants %>%
+  select(threat_AA:threat_NA) %>%
+  colSums(plants != 0)
+```
+Notably, the real top reason for extinction (threat: Agriculture & Aquaculture) is more than a two times increase from the top reason for extinction in Cyanea whose highest threat was invasive species. 
+
+
+# Data 
+
+Overall this dataset contains a wide variety of elements that can serve for interesting jumping off points, when edited to divide bionomial_name into genus and species to better track greater trends, it's 500 x 25 dimension leads to an astounding number of possible elements to tell various stories through the data given. 
+
+Hailing from ICUN's redlist database the data at play already comes with inherent reading material to reflect on and better trace trends and how the data genuinely marks and reflects real life. Which paired with it's origins as a tidyverse data set, leads to clean data with extremely solid foundations for various interpretations, 
+
+Link to it can be found here: [link](#github_link)
+
+
+With all of the above in mind, I believe at this stage I've roughed out my ideas enough to continue on. 
