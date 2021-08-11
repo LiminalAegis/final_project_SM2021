@@ -74,8 +74,8 @@ Extinct_Plants %>%
   select(threat_AA:threat_NA) %>%
   colSums(plants!= 0)
 ```
-From this it's apparent that ISGD was the largest factor in influence but there were also other unanswered questions
-
+From this it's apparent that ISGD was the largest factor in influence but there were also other unanswered questions,
+For one how consistently did all of the Genus experience threats?
 
 ```{r}
 
@@ -107,6 +107,16 @@ Cyanea_Extinct_Plants %>%
   
   
 ```
+Surprisingly it turned out having only a single threat was the norm, leaving questions about the consistency of these extinctions.
+Creating the question of:
+**What was the frequency of extinctions over time like?**
+
+Which in turn lead to some data cleaning by making sure the "Before 1900" factor wouldn't lead to things being out of order due to years in this dataset being characters.
+
+```{r}
+Extinct_Plants$year_last_seen[Extinct_Plants$year_last_seen == "Before 1900"] <- 1900
+```
+
 ```{r}
 Extinct_Plants %>%
   ggplot()+
@@ -121,6 +131,8 @@ Extinct_Plants %>%
 ```
 
 ```{r}
+Cyanea_Extinct_Plants$year_last_seen[Cyanea_Extinct_Plants$year_last_seen == "Before 1900"] <- 1900
+
 Cyanea_Extinct_Plants %>%
   ggplot()+
   geom_count(aes(y = year_last_seen, x = red_list_category))+
@@ -132,120 +144,25 @@ Cyanea_Extinct_Plants %>%
     fill = "Amount"
   )
 ```
+Upon seeing the results of the general trends I found interest in 2000-2002 as general trends indicated that being extinct only in the wild was generally the lesser of options, while the Cyanea trend demonstrating an especially interesting outlier with it's group given that in no other year was there a species explicitly extinct only in the wild. 
+
+Thus, I sort the data down to learn about these problem outliers: 
+
 ```{r}
 Cyanea_Extinct_Plants %>%
   filter(year_last_seen == "2000-2020") %>%
   select(-country,-continent, -group)
 ```
-```{r}
-Cyanea_Extinct_Plants %>%
-  filter(Species == "undulata")
-```
-
-
-
-```{r}
-Ranked <- Extinct_Plants %>%
-  group_by(Genus, year_last_seen, group) %>%
-  summarize(extinction_total = n())%>%
-  arrange(desc(extinction_total))
-print(Ranked)
-
-```
-
-
-
-
-
-
-
-```{r}
-Concern_levels <- function(ext_total){
-  if(ext_total == 1) {
-    return ("Low")
-  }
-  else if (  ext_total < 3){
-    return ("Moderate")
-  }
-  
-  else if ( ext_total < 5 ){
-    return("High")
-  }
-  
-  else if (ext_total < 7){
-    ("Very high")
-  }
-  else{
-    return("Pressing")
-  }
-}
-
-
-
-Ranked <- Ranked %>%
-  rowwise() %>%
-  mutate(Concern_levels = Concern_levels(extinction_total))
-
-print(Ranked)
-
-```
-```{r}
-Ranked %>%
-  ggplot(aes(x = group, y = Concern_levels))+
-  geom_count()
-
-```
-```{r}
-
-```
-
-
-
-```{r}
-print(Extinct_Plants)
-```
-
-```{r}
-Extinct_Plants %>%
-  ggplot()+
-  geom
-```
-
-
--country, extinction numbers fill = extinction type 
-```{r}
-Ranked %>%
-  ggplot()+
-  geom_point(aes(x = country, y = year_last_seen, color=Concern_levels))
-```
-
-
-
-- year segments, extinctions each year
 
 # Data analysis
-```{r}
 
-```
+Per my goal to reduce things as much as possible to get the story of the data at play here, I found myself reasearching for real-life connections to see how the data structure compares as well as reflecting notable circumstances. 
 
--
+## Real world connections {.tabset .tabset-fade .tabset-pills #real_world}
 
--transition into citing aspects of earlier exploration 
-
-## Real world connections {#real_world}
-
-0-fjhroagh
-
-# Specific cases {.tabset .tabset-fade .tabset-pills}
-
--talk about real world stuff 
--multi-tab with subgroups here for images corresponding to specific sub-cases 
-
-## one section
-
-## another section
-
-## another section
+### Cyanea Kuhihewa
+### Cyanea Pinnatafinda 
+### Cyanea Superba
 
 
 # Conclusion
@@ -259,4 +176,6 @@ Ranked %>%
 * Christina Crooker <https://scholarspace.manoa.hawaii.edu/bitstream/10125/10404/uhm_ms_3912_r.pdf>
 * FWS: <https://ecos.fws.gov/docs/five_year_review/doc1131.pdf>
 * UNL: <https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2548&context=icwdm_usdanwrc>
-* DLNR: <https://dlnr.hawaii.gov/wildlife/files/2013/09/Fact-Sheet-Cyanea-undulata.pdf>
+* DLNR: <https://dlnr.hawaii.gov/wildlife/files/2013/09/Fact-Sheet-Cyanea-pinnatifida.pdf> 
+* DOI: <https://www.publicgardens.org/file/46700/download?token=4PbQJleN>
+
