@@ -180,13 +180,13 @@ Per my goal to reduce things as much as possible to get the story of the data at
 
 ### Cyanea Kuhihewa
 
-***-Image link ***
+![Cyanea Kuhihewa](https://github.com/LiminalAegis/final_project_SM2021/blob/master/Project_Pictures/kuhihewa.JPG)
 
 Cyanea Kuhihewa is an especially interesting outlier in a group of outliers due to no longer being regarded as extinct, additionally it's presence in the data serves a meta-contextual role of better explaining what factors compose the "Unknown" of threat data, and as to why it's so prevalent among the Cyanea genus. 
 
 To summarise, my analysis began with research into the species itself through the origin of the dataset (ICUN). Not only as to gain information assured to be paired but also likely to more easily demonstrate outliers. Initially seeing it wasn't regarded as extinct mislead my reasoning towards an assumption of a categorization error in the data, however upon further research I learned through (PPP) the nature of circumstances in which they came back. 
 
-***-Image of map***
+![Map of endemic location](https://github.com/LiminalAegis/final_project_SM2021/blob/master/Project_Pictures/map.JPG)
 
 Much of Hawaii's life is highly endemic and specific to certain areas, as well as some being in places that are simply dangerous to investigate. It wasn't until 2017 that a group of researchers went into Limahuli Valley (which had in the past yielded other hidden results of new species of Cyanea) stumbled across an outcropping of the now only two living members of the species. 
 ```{r}
@@ -200,7 +200,7 @@ Intriguingly this circumstance is likely why certain species with less certainty
 
 ### Cyanea Pinnatafinda 
 
- ***Image***
+![Cyanea Pinnatafinda](https://github.com/LiminalAegis/final_project_SM2021/blob/master/Project_Pictures/pinnatifida.JPG)
 According to a write up from the Hawaii department of land and natural resources (DLNR) Pinnatafinda's story is a straightforward if tragic one. Written back when the species was still endangered it's listed threats of:
 
 * Threats 
@@ -215,11 +215,11 @@ Truthfully the most note of it's last viewing in the 2000's and data presence as
 
 ### Cyanea Superba
 
- ***Image***
+ ![Cyanea Superba](https://github.com/LiminalAegis/final_project_SM2021/blob/master/Project_Pictures/superba.jpg)
  
 Of the species investigated Superba held with it some of the most comprehensive situation on it's extinction circumstance, with (UNL) having a comprehensive write-up on the effects of invasive rat species as well as Japanese White-Eye. Given the nature of Invasive species having the greatest effect Superba revealed with it much of the reasoning for why Cyanea is stuck in such a peculiar circumstance of extinction. 
 
- ***Rat & fruit images***
+  ![Rat-chewn seed](https://github.com/LiminalAegis/final_project_SM2021/blob/master/Project_Pictures/Bit_in_seed.JPG)
 
 The invasive black rats or *Rattus rattus* have a strong effect on all endemic flowering fruit in Hawaii (Of which all all Cyanea species are a part of) due not only for their tendency to eat group, but also do to the seeds not surviving their digestive track. Pair this as well with UNL's reports of seed germination lowering at a rapid rate and as of writing the article having over half of the original Superba population in the area they were introduced to, and the accumulating factors playing against Cyanea's are apparent. Additionally, although less likely to do so by a significant margin than black rats, Japanese white-eye's are furgivores and thus bring with them even more stress to an endemic population. 
 
