@@ -1,13 +1,262 @@
 ---
 title: "Final Report for Intro to Data Science"
-output: html_notebook
+output:
+  html_notebook:
+    toc: true
+    toc_float: true
+    number_sections: FALSE
 ---
 
-This is where the final project report write-up goes. 
+# Introduction
+
+Many scientists state that we are in the midst of a mass extinction, biodiversity has been lost at unprecedented rates compared to previous years, and with the increasing fears of climate change and humanity's effects on the environment these fears have only grown. Because of this I found particular interest in a data set that might serve to explain a pattern of what's going on, and especially one that might tell far lesser known stories with *significant* real-life applications.
+
+The data set here originally finds it's origins as a the 2020-1 Extinct Species Report from [ICUN](#source_link), a group known for their work with the *Red List of Threatened Species* as well as being at the relative forefront of researches towards Red-List adjacent matters. While they do a number of reports this data is on the *Plantae* kingdom specifically, of which I felt more drawn towards due to being aquainted, and thus more confident in my abilities to have an in-depth analysis in. 
+
+Now, without further into the hidden stories of this data set. 
+
+# Prerequisites
+
+Loading all required packages/data needed.
+```{r}
+#Import data set:
+
+Extinct_Plants <- read.csv("https://github.com/LiminalAegis/final_project_SM2021/blob/master/data/Extinct_Plants.csv")
+
+#Load packages:
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+Data used for 'Extinct_Plants' can be found [here](#source_link): 
 
 
-Before you submit, make sure everything runs as expected.
+# Data Exploration
 
-You can add sections as you see fit. Make sure you have a section called "Introduction" at the beginning and a section called "Conclusion" at the end. The rest is up to you!
+When initially presented with the data set I was pushed towards wanting a broad scope of understanding to later compress and narrow down into an individual level. As such, I wanted to get generally trends out of the way, to hopefully dig to the center of a hidden issue. 
 
-_Make use of your knowledge of Markdown to appropriately typeset this report!_
+General analysis:
+```{r}
+summary(Extinct_Plants)
+```
+
+Implemented the separate function in order to find Genus trends, being of importance to get a feel for a group of alike species to analyse later on.
+
+```{r}
+#Setting data up to notice genus trends
+Extinct_Plants <- separate(Extinct_Plants, binomial_name, into =  c("Genus", "Species"), sep = " ")
+```
+
+And afterwards, came to one of my first big questions for exploration:
+**Which Genus holds the largest number of extinct species?**
+
+```{r}
+Extinct_Plants %>%
+  group_by(Genus) %>%
+  summarize(extinction_total = n()) %>%
+  arrange(desc(extinction_total))
+```
+And thus a breakthrough. The Cyanea genus is intriguing not only for being the top of the extinction totals, but being double the next highest Genus. Inhrently this leads to the next question:
+
+**What circumstances would cause this?**
+
+```{r}
+Extinct_Plants %>%
+  filter(Genus == "Cyanea") 
+```
+From this I knew ahead of time that continent climate seems to be consistent among all of Cyanea (as I get more into in [this section](#real_world)), so this left an analysis of the different threats each species seems to experience, as well as what the largest factor is for all of them. 
+
+```{r}
+Extinct_Plants %>%
+  filter(Genus == "Cyanea")%>%
+  select(threat_AA:threat_NA) %>%
+  colSums(plants!= 0)
+```
+From this it's apparent that ISGD was the largest factor in influence but there were also other unanswered questions
+
+
+```{r}
+
+#Data transformation to get total threats each species faces
+Threat_organizer <- Extinct_Plants %>% 
+  filter(Genus == "Cyanea")%>%
+  select(starts_with("threat"))
+  threat_rows<- rowSums(Threat_organizer)
+  
+Cyanea_Extinct_Plants <- Extinct_Plants %>%
+  filter(Genus == "Cyanea")
+  
+Cyanea_Extinct_Plants$threat_total = c(threat_rows)
+
+
+
+Cyanea_Extinct_Plants %>%
+  ggplot()+
+  geom_bar(aes(x = threat_total , color = Species))+
+   theme(legend.background = element_rect(fill="lightblue", 
+                                  size=0.5, linetype="solid"))+
+  theme(legend.position="bottom")+
+  labs(
+    title = "Threat amounts for Cyanea species",
+    subtitle = "A glance into how consistently the Genus experiences ICUN defined threats",
+    x = "Threat Count",
+    y = "# of Species effected"
+  )
+  
+  
+```
+```{r}
+Extinct_Plants %>%
+  ggplot()+
+  geom_count(aes(y = year_last_seen, x = red_list_category))+
+  labs(
+    title = "Frequency of Extinction Types Per Year",
+    subtitle = "As Observed Across Every Genus",
+    y = "Years Since Last Seen",
+    x = "Degree of extinction",
+    fill = "Amount"
+  )
+```
+
+```{r}
+Cyanea_Extinct_Plants %>%
+  ggplot()+
+  geom_count(aes(y = year_last_seen, x = red_list_category))+
+  labs(
+    title = "Frequency of Extinction Types Per Year",
+    subtitle = "As Observed in Cyanea",
+    y = "Years Since Last Seen",
+    x = "Degree of extinction",
+    fill = "Amount"
+  )
+```
+```{r}
+Cyanea_Extinct_Plants %>%
+  filter(year_last_seen == "2000-2020") %>%
+  select(-country,-continent, -group)
+```
+```{r}
+Cyanea_Extinct_Plants %>%
+  filter(Species == "undulata")
+```
+
+
+
+```{r}
+Ranked <- Extinct_Plants %>%
+  group_by(Genus, year_last_seen, group) %>%
+  summarize(extinction_total = n())%>%
+  arrange(desc(extinction_total))
+print(Ranked)
+
+```
+
+
+
+
+
+
+
+```{r}
+Concern_levels <- function(ext_total){
+  if(ext_total == 1) {
+    return ("Low")
+  }
+  else if (  ext_total < 3){
+    return ("Moderate")
+  }
+  
+  else if ( ext_total < 5 ){
+    return("High")
+  }
+  
+  else if (ext_total < 7){
+    ("Very high")
+  }
+  else{
+    return("Pressing")
+  }
+}
+
+
+
+Ranked <- Ranked %>%
+  rowwise() %>%
+  mutate(Concern_levels = Concern_levels(extinction_total))
+
+print(Ranked)
+
+```
+```{r}
+Ranked %>%
+  ggplot(aes(x = group, y = Concern_levels))+
+  geom_count()
+
+```
+```{r}
+
+```
+
+
+
+```{r}
+print(Extinct_Plants)
+```
+
+```{r}
+Extinct_Plants %>%
+  ggplot()+
+  geom
+```
+
+
+-country, extinction numbers fill = extinction type 
+```{r}
+Ranked %>%
+  ggplot()+
+  geom_point(aes(x = country, y = year_last_seen, color=Concern_levels))
+```
+
+
+
+- year segments, extinctions each year
+
+# Data analysis
+```{r}
+
+```
+
+-
+
+-transition into citing aspects of earlier exploration 
+
+## Real world connections {#real_world}
+
+0-fjhroagh
+
+# Specific cases {.tabset .tabset-fade .tabset-pills}
+
+-talk about real world stuff 
+-multi-tab with subgroups here for images corresponding to specific sub-cases 
+
+## one section
+
+## another section
+
+## another section
+
+
+# Conclusion
+
+-yehaw im done
+
+# Citations {#source_link}
+
+* Link to dataset used (includes original source): <https://github.com/LiminalAegis/final_project_SM2021/tree/master/data>
+* ICUN: <https://www.iucnredlist.org/>
+* Christina Crooker <https://scholarspace.manoa.hawaii.edu/bitstream/10125/10404/uhm_ms_3912_r.pdf>
+* FWS: <https://ecos.fws.gov/docs/five_year_review/doc1131.pdf>
+* UNL: <https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2548&context=icwdm_usdanwrc>
+* DLNR: <https://dlnr.hawaii.gov/wildlife/files/2013/09/Fact-Sheet-Cyanea-undulata.pdf>
