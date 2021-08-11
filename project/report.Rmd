@@ -41,6 +41,22 @@ General analysis:
 ```{r}
 summary(Extinct_Plants)
 ```
+Additionally a Key for understanding what "threat_xx" means. {RefKey} 
+
+* Threat types:
+  + AA = Agriculture & Aquaculture
+  + BRU = Biological Resource Use
+  + RCD = Commercial Development
+  + ISGD = Invasive species
+  + EPM = Energy Production & Mining
+  + CC = Climate Change
+  + HID = Human Intrusions
+  + P = Pollution
+  + TS = Transportation Corridor
+  + NSM = Natural System Modifications
+  + GE = Geological Events
+  + NA = Unknown
+
 
 Implemented the separate function in order to find Genus trends, being of importance to get a feel for a group of alike species to analyse later on.
 
@@ -50,7 +66,8 @@ Extinct_Plants <- separate(Extinct_Plants, binomial_name, into =  c("Genus", "Sp
 ```
 
 And afterwards, came to one of my first big questions for exploration:
-**Which Genus holds the largest number of extinct species?**
+
+## **Which Genus holds the largest number of extinct species?**
 
 ```{r}
 Extinct_Plants %>%
@@ -60,7 +77,7 @@ Extinct_Plants %>%
 ```
 And thus a breakthrough. The Cyanea genus is intriguing not only for being the top of the extinction totals, but being double the next highest Genus. Inhrently this leads to the next question:
 
-**What circumstances would cause this?**
+## **What circumstances would cause this?**
 
 ```{r}
 Extinct_Plants %>%
@@ -109,7 +126,8 @@ Cyanea_Extinct_Plants %>%
 ```
 Surprisingly it turned out having only a single threat was the norm, leaving questions about the consistency of these extinctions.
 Creating the question of:
-**What was the frequency of extinctions over time like?**
+
+## **What was the frequency of extinctions over time like?**
 
 Which in turn lead to some data cleaning by making sure the "Before 1900" factor wouldn't lead to things being out of order due to years in this dataset being characters.
 
@@ -161,13 +179,62 @@ Per my goal to reduce things as much as possible to get the story of the data at
 ## Real world connections {.tabset .tabset-fade .tabset-pills #real_world}
 
 ### Cyanea Kuhihewa
+
+***-Image link ***
+
+Cyanea Kuhihewa is an especially interesting outlier in a group of outliers due to no longer being regarded as extinct, additionally it's presence in the data serves a meta-contextual role of better explaining what factors compose the "Unknown" of threat data, and as to why it's so prevalent among the Cyanea genus. 
+
+To summarise, my analysis began with research into the species itself through the origin of the dataset (ICUN). Not only as to gain information assured to be paired but also likely to more easily demonstrate outliers. Initially seeing it wasn't regarded as extinct mislead my reasoning towards an assumption of a categorization error in the data, however upon further research I learned through (PPP) the nature of circumstances in which they came back. 
+
+***-Image of map***
+
+Much of Hawaii's life is highly endemic and specific to certain areas, as well as some being in places that are simply dangerous to investigate. It wasn't until 2017 that a group of researchers went into Limahuli Valley (which had in the past yielded other hidden results of new species of Cyanea) stumbled across an outcropping of the now only two living members of the species. 
+```{r}
+Cyanea_Extinct_Plants %>%
+  filter(Species == "kuhihewa") 
+```
+Looking back at the threat table, we can see (click [here](RefKey) for threat key) that at the time the biggest influences behind their believed extinction were invasive species as well as climate change. While they are no longer considered extinct this, assessment does still hold up with modern information. 
+(PPP) Hawaii has actively been held up in an extinction crisis due to a mixture of being a hot-spot for endemic species as well as being privy towards colonialism causing the introduction of a variety of invasive species. For Kuhihewa, they feel off the radar in the 2000's which corresponds well with the introduction of Miconia around the 1960's leading to the destruction of their already necessary and endemic environment with nutrients low enough to in turn cause stress from climate change to be a nail in the coffin, an idea that grew in awareness through the 2000's. 
+
+Intriguingly this circumstance is likely why certain species with less certainty in worsening circumstances beforehand may be put as unknown as many of the species endemic to Hawaii are in vastly hard to reach areas, leading some to consider they may simply be hidden, a circumstance which corresponds well with the spot Kuhihewa being found in Limahuli valley. Previously a varient of *Cyanea linearifolia* was rediscovered in this location.
+
 ### Cyanea Pinnatafinda 
+
+ ***Image***
+According to a write up from the Hawaii department of land and natural resources (DLNR) Pinnatafinda's story is a straightforward if tragic one. Written back when the species was still endangered it's listed threats of:
+
+* Threats 
+   + Reduced reproductive vigor due to lack of genetic diversity
+   + Competition from an alien plant species
+   + Habitat degradation by feral pigs
+   + Collection or trampling by humans on or near trails
+   
+Correspond directly without much to read into with what the data has shown. Invasive species as a whole are the biggest by far and even it's more unique factors with development tie in directly with Cyanea's overall inherent problem with being endemic with human development and environmental destruction both making what they have left smaller as well as causing issues to the few living members of the species. 
+
+Truthfully the most note of it's last viewing in the 2000's and data presence as a whole it's tragic story. Before it's extinction only one member of it's species remained on a private property in Kakua's Gulch. a sad last citing to say the least. 
+
 ### Cyanea Superba
+
+ ***Image***
+ 
+Of the species investigated Superba held with it some of the most comprehensive situation on it's extinction circumstance, with (UNL) having a comprehensive write-up on the effects of invasive rat species as well as Japanese White-Eye. Given the nature of Invasive species having the greatest effect Superba revealed with it much of the reasoning for why Cyanea is stuck in such a peculiar circumstance of extinction. 
+
+ ***Rat & fruit images***
+
+The invasive black rats or *Rattus rattus* have a strong effect on all endemic flowering fruit in Hawaii (Of which all all Cyanea species are a part of) due not only for their tendency to eat group, but also do to the seeds not surviving their digestive track. Pair this as well with UNL's reports of seed germination lowering at a rapid rate and as of writing the article having over half of the original Superba population in the area they were introduced to, and the accumulating factors playing against Cyanea's are apparent. Additionally, although less likely to do so by a significant margin than black rats, Japanese white-eye's are furgivores and thus bring with them even more stress to an endemic population. 
+
+Ultimately the foundation behind vulnerability in species across the board is seen as having direct ties towards a few factors:
+
+* Endemic, only being found in one place or in a very specific environment
+* Small population size, while also generally the result of other factors small population size as with Christina Crooker's thesis on the pressing extinction rates in Hawaii causing a thinning of the gene-pool which leads to circumstances of especially vulnerabilities across the entire species due to a lack of genetic divergence. 
+* Presence of invasive species, being out competed in one's environmental niche is one of the fundamental reasons extinction occurs. 
 
 
 # Conclusion
 
--yehaw im done
+Concluding this exploration, I find myself with a lot more insight into the nature of extinction, as well as the work that goes into preventing it. While data has it's important intricacies at a smaller scale I felt that using it as a bouncing off point to check factors served significantly to strengthen my understanding and truthfully, appreciation for the topics it surrounds. Hearing so much work done in five-year long stories, or the two last Kuhihewa's diligent care systems paired with tireless research of checking night cameras and repeating interaction after interaction to guarantee a truthful assessment to create accurate data has more than anything become a profoundly humbling experience. 
+
+In current year we are on the precipice of a lot of things. Climate change, rapid human development, agriculture, human-introduced invasive species, and so much more have been growing to a point where many species simply can't handle to stress anymore. While what happened to the Cyanea genus is a tragedy in it's own right, much in the way amphibians do as an indicator species for their environment, their extinction and vulnerability serve as a canary call for greater tragedy approaching. 
 
 # Citations {#source_link}
 
@@ -177,5 +244,4 @@ Per my goal to reduce things as much as possible to get the story of the data at
 * FWS: <https://ecos.fws.gov/docs/five_year_review/doc1131.pdf>
 * UNL: <https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2548&context=icwdm_usdanwrc>
 * DLNR: <https://dlnr.hawaii.gov/wildlife/files/2013/09/Fact-Sheet-Cyanea-pinnatifida.pdf> 
-* DOI: <https://www.publicgardens.org/file/46700/download?token=4PbQJleN>
-
+* PPP: <https://www.publicgardens.org/file/46700/download?token=4PbQJleN>
